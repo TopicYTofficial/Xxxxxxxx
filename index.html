@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameBay - Безопасная площадка для игровых ценностей</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-gamepad"></i>
+                <span>GameBay</span>
+            </div>
+            <nav class="nav">
+                <a href="#catalog" class="nav-link">Каталог</a>
+                <a href="#sell" class="nav-link">Продать</a>
+                <a href="#balance" class="nav-link">Баланс</a>
+                <a href="#support" class="nav-link">Поддержка</a>
+            </nav>
+            <div class="auth-buttons">
+                <button class="btn btn-outline" onclick="showLogin()">Вход</button>
+                <button class="btn btn-primary" onclick="showRegister()">Регистрация</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Безопасная площадка для игровых ценностей</h1>
+                <p>Покупайте и продавайте игровые предметы, аккаунты и валюту с гарантией безопасности</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary btn-large" onclick="scrollToSection('catalog')">
+                        <i class="fas fa-shopping-cart"></i> Купить
+                    </button>
+                    <button class="btn btn-secondary btn-large" onclick="scrollToSection('sell')">
+                        <i class="fas fa-tag"></i> Продать
+                    </button>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Gaming">
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+        <div class="container">
+            <h2>Почему выбирают GameBay?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Гарант-сделки</h3>
+                    <p>Ваши деньги защищены до подтверждения получения товара</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-user-secret"></i>
+                    <h3>Анонимность</h3>
+                    <p>Контакты продавца и покупателя скрыты для безопасности</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-bolt"></i>
+                    <h3>Быстрые сделки</h3>
+                    <p>Мгновенное проведение транзакций и передача товаров</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-headset"></i>
+                    <h3>Поддержка 24/7</h3>
+                    <p>Круглосуточная помощь и разрешение споров</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Catalog -->
+    <section id="catalog" class="catalog">
+        <div class="container">
+            <h2>Каталог товаров</h2>
+            <div class="catalog-filters">
+                <select id="gameFilter" onchange="filterItems()">
+                    <option value="all">Все игры</option>
+                    <option value="Roblox">Roblox</option>
+                    <option value="other">Другие игры</option>
+                </select>
+                <select id="sortFilter" onchange="filterItems()">
+                    <option value="newest">Сначала новые</option>
+                    <option value="price_asc">Цена по возрастанию</option>
+                    <option value="price_desc">Цена по убыванию</option>
+                </select>
+                <input type="text" id="searchInput" placeholder="Поиск товаров..." oninput="filterItems()">
+            </div>
+            <div id="itemsGrid" class="items-grid">
+                <!-- Items will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Sell Section -->
+    <section id="sell" class="sell">
+        <div class="container">
+            <h2>Продать товар</h2>
+            <form id="sellForm" class="sell-form">
+                <div class="form-group">
+                    <label>Игра:</label>
+                    <select id="gameSelect" required>
+                        <option value="">Выберите игру</option>
+                        <option value="Roblox">Roblox</option>
+                        <option value="Minecraft">Minecraft</option>
+                        <option value="Fortnite">Fortnite</option>
+                        <option value="other">Другая игра</option>
+                    </select>
+                </div>
+                <div class="form-group" id="customGameGroup" style="display: none;">
+                    <label>Название игры:</label>
+                    <input type="text" id="customGame" placeholder="Введите название игры">
+                </div>
+                <div class="form-group">
+                    <label>Название товара:</label>
+                    <input type="text" id="itemTitle" required placeholder="Например: Аккаунт с редкими скинами">
+                </div>
+                <div class="form-group">
+                    <label>Описание:</label>
+                    <textarea id="itemDescription" required rows="4" placeholder="Подробное описание товара..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Цена ($):</label>
+                    <input type="number" id="itemPrice" required min="0.01" step="0.01" placeholder="0.00">
+                </div>
+                <div class="form-group">
+                    <label>Количество:</label>
+                    <input type="number" id="itemQuantity" required min="1" value="1">
+                </div>
+                <button type="submit" class="btn btn-primary">Разместить товар</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Auth Modals -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h3>Вход в аккаунт</h3>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Telegram ID:</label>
+                    <input type="text" id="loginTgId" required>
+                </div>
+                <div class="form-group">
+                    <label>Пароль:</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Войти</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('registerModal')">&times;</span>
+            <h3>Регистрация</h3>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label>Telegram ID:</label>
+                    <input type="text" id="regTgId" required>
+                </div>
+                <div class="form-group">
+                    <label>Имя пользователя:</label>
+                    <input type="text" id="regUsername" required>
+                </div>
+                <div class="form-group">
+                    <label>Пароль:</label>
+                    <input type="password" id="regPassword" required>
+                </div>
+                <div class="form-group">
+                    <label>Повторите пароль:</label>
+                    <input type="password" id="regPasswordConfirm" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>GameBay</h4>
+                    <p>Безопасная площадка для покупки и продажи игровых ценностей</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Ссылки</h4>
+                    <a href="#catalog">Каталог</a>
+                    <a href="#sell">Продать</a>
+                    <a href="#support">Поддержка</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Помощь</h4>
+                    <a href="#" onclick="showRules()">Правила</a>
+                    <a href="#" onclick="showPrivacy()">Конфиденциальность</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 GameBay. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
