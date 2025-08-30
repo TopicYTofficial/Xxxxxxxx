@@ -3,391 +3,676 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TechStore - Магазин электроники</title>
+    <title>Telegram Web</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
-            background-color: #f8f9fa;
-            color: #333;
-            line-height: 1.6;
+            display: flex;
+            height: 100vh;
+            background-color: #1e1e1e;
+            color: #e6e6e6;
         }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
+
+        /* Сайдбар с аккаунтами */
+        .accounts-sidebar {
+            width: 80px;
+            background-color: #2d2d2d;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0;
+            border-right: 1px solid #444;
         }
-        
-        /* Шапка сайта */
-        header {
-            background-color: #343a40;
+
+        .account-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0088cc, #00a2ff);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: white;
-            padding: 15px 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+            transition: transform 0.2s;
         }
-        
-        .header-content {
+
+        .account-avatar:hover {
+            transform: scale(1.1);
+        }
+
+        .account-avatar.active {
+            border: 3px solid #0088cc;
+            box-shadow: 0 0 10px rgba(0, 136, 204, 0.5);
+        }
+
+        .add-account {
+            background: #444;
+            font-size: 24px;
+        }
+
+        /* Сайдбар с чатами */
+        .chats-sidebar {
+            width: 350px;
+            background-color: #2d2d2d;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #444;
+        }
+
+        .sidebar-header {
+            padding: 15px;
+            background-color: #2d2d2d;
+            color: white;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid #444;
         }
-        
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
+
+        .search-container {
+            padding: 10px 15px;
+            background-color: #2d2d2d;
+            border-bottom: 1px solid #444;
         }
-        
-        .logo span {
-            color: #4caf50;
-        }
-        
-        nav ul {
-            display: flex;
-            list-style: none;
-        }
-        
-        nav ul li {
-            margin-left: 20px;
-        }
-        
-        nav ul li a {
+
+        .search-input {
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: 20px;
+            border: none;
+            background-color: #3d3d3d;
             color: white;
-            text-decoration: none;
-            transition: color 0.3s;
         }
-        
-        nav ul li a:hover {
-            color: #4caf50;
+
+        .search-input::placeholder {
+            color: #888;
         }
-        
-        .cart-icon {
-            position: relative;
+
+        .chat-list {
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        .chat-item {
+            padding: 15px;
+            display: flex;
+            border-bottom: 1px solid #3d3d3d;
             cursor: pointer;
         }
-        
-        .cart-count {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            background-color: #4caf50;
+
+        .chat-item:hover {
+            background-color: #3d3d3d;
+        }
+
+        .chat-item.active {
+            background-color: #3d3d3d;
+            border-left: 3px solid #0088cc;
+        }
+
+        .chat-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0088cc, #00a2ff);
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .chat-info {
+            flex-grow: 1;
+        }
+
+        .chat-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .verified-badge {
+            color: #0088cc;
+            margin-left: 5px;
+            font-size: 14px;
+        }
+
+        .chat-last-message {
+            color: #999;
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chat-meta {
+            text-align: right;
+        }
+
+        .chat-time {
+            font-size: 12px;
+            color: #777;
+            margin-bottom: 5px;
+        }
+
+        .chat-unread {
+            background-color: #0088cc;
             color: white;
             border-radius: 50%;
             width: 20px;
             height: 20px;
-            display: flex;
-            justify-content: center;
+            display: inline-flex;
             align-items: center;
+            justify-content: center;
             font-size: 12px;
         }
-        
-        /* Баннер */
-        .banner {
-            background: linear-gradient(to right, #4caf50, #8bc34a);
-            color: white;
-            text-align: center;
-            padding: 50px 20px;
-            margin-bottom: 30px;
+
+        /* Основная область чата */
+        .chat-area {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #1e1e1e;
         }
-        
-        .banner h1 {
-            font-size: 36px;
-            margin-bottom: 15px;
+
+        .chat-header {
+            padding: 15px;
+            background-color: #2d2d2d;
+            border-bottom: 1px solid #444;
+            display: flex;
+            align-items: center;
         }
-        
-        .banner p {
-            font-size: 18px;
-            margin-bottom: 20px;
+
+        .chat-user-info {
+            margin-left: 15px;
+            flex-grow: 1;
         }
-        
-        .btn {
-            display: inline-block;
-            background-color: white;
-            color: #4caf50;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
+
+        .chat-user-name {
             font-weight: bold;
-            transition: all 0.3s;
+            display: flex;
+            align-items: center;
         }
-        
-        .btn:hover {
-            background-color: #f1f1f1;
-            transform: translateY(-2px);
+
+        .chat-user-status {
+            font-size: 13px;
+            color: #0088cc;
         }
-        
-        /* Каталог товаров */
-        .products {
-            padding: 30px 0;
+
+        .chat-actions {
+            display: flex;
+            gap: 15px;
+            color: #999;
         }
-        
-        .section-title {
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 28px;
-            color: #343a40;
+
+        .chat-actions i {
+            cursor: pointer;
+            font-size: 18px;
         }
-        
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 25px;
+
+        .chat-actions i:hover {
+            color: #0088cc;
         }
-        
-        .product-card {
-            background-color: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
+
+        .messages-container {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #1e1e1e;
+            display: flex;
+            flex-direction: column;
         }
-        
-        .product-card:hover {
-            transform: translateY(-5px);
+
+        .message {
+            max-width: 70%;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
         }
-        
-        .product-image {
-            height: 200px;
-            background-color: #f5f5f5;
+
+        .message-incoming {
+            align-items: flex-start;
+        }
+
+        .message-outgoing {
+            align-items: flex-end;
+            margin-left: auto;
+        }
+
+        .message-bubble {
+            padding: 10px 15px;
+            border-radius: 18px;
+            margin-bottom: 5px;
+            position: relative;
+        }
+
+        .incoming .message-bubble {
+            background-color: #2d2d2d;
+            border-top-left-radius: 5px;
+        }
+
+        .outgoing .message-bubble {
+            background-color: #0088cc;
+            border-top-right-radius: 5px;
+        }
+
+        .message-sender {
+            font-size: 12px;
+            color: #0088cc;
+            margin-bottom: 3px;
+            margin-left: 5px;
+        }
+
+        .message-time {
+            font-size: 12px;
+            color: #777;
+            margin: 0 5px;
+        }
+
+        .message-input-container {
+            padding: 15px;
+            background-color: #2d2d2d;
+            display: flex;
+            align-items: center;
+            border-top: 1px solid #444;
+        }
+
+        .message-input-action {
+            color: #777;
+            font-size: 20px;
+            cursor: pointer;
+            margin: 0 10px;
+        }
+
+        .message-input-action:hover {
+            color: #0088cc;
+        }
+
+        .message-input {
+            flex-grow: 1;
+            padding: 12px 15px;
+            border-radius: 20px;
+            border: none;
+            background-color: #3d3d3d;
+            color: white;
+        }
+
+        .message-input::placeholder {
+            color: #777;
+        }
+
+        .send-button {
+            background-color: #0088cc;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-        
-        .product-image img {
-            max-width: 100%;
-            max-height: 180px;
-        }
-        
-        .product-info {
-            padding: 15px;
-        }
-        
-        .product-title {
-            font-size: 16px;
-            margin-bottom: 10px;
-            height: 40px;
-            overflow: hidden;
-        }
-        
-        .product-price {
-            font-size: 18px;
-            font-weight: bold;
-            color: #4caf50;
-            margin-bottom: 15px;
-        }
-        
-        .add-to-cart {
-            width: 100%;
-            padding: 8px;
-            background-color: #4caf50;
-            color: white;
-            border: none;
-            border-radius: 4px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            margin-left: 10px;
         }
-        
-        .add-to-cart:hover {
-            background-color: #3d8b40;
+
+        .send-button:hover {
+            background-color: #0077b3;
         }
-        
-        /* Подвал сайта */
-        footer {
-            background-color: #343a40;
-            color: white;
-            padding: 30px 0;
-            margin-top: 50px;
-        }
-        
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-        }
-        
-        .footer-section h3 {
-            margin-bottom: 15px;
-            font-size: 18px;
-        }
-        
-        .footer-section p, .footer-section a {
-            color: #ccc;
-            margin-bottom: 10px;
-            display: block;
-            text-decoration: none;
-        }
-        
-        .footer-section a:hover {
-            color: #4caf50;
-        }
-        
-        .copyright {
-            text-align: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #555;
-            color: #ccc;
-        }
-        
+
         /* Адаптивность */
+        @media (max-width: 1200px) {
+            .chats-sidebar {
+                width: 300px;
+            }
+        }
+
         @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                text-align: center;
+            .accounts-sidebar {
+                display: none;
             }
             
-            nav ul {
-                margin-top: 15px;
-                justify-content: center;
+            .chats-sidebar {
+                width: 100%;
+                display: none;
             }
             
-            .banner h1 {
-                font-size: 28px;
+            .chat-area {
+                width: 100%;
             }
-            
-            .banner p {
-                font-size: 16px;
-            }
+        }
+
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message {
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* Полоса прокрутки */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #2d2d2d;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #555;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0088cc;
         }
     </style>
 </head>
 <body>
-    <!-- Шапка сайта -->
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">Tech<span>Store</span></div>
-                <nav>
-                    <ul>
-                        <li><a href="#">Главная</a></li>
-                        <li><a href="#">Каталог</a></li>
-                        <li><a href="#">О нас</a></li>
-                        <li><a href="#">Контакты</a></li>
-                        <li class="cart-icon">
-                            Корзина
-                            <span class="cart-count">3</span>
-                        </li>
-                    </ul>
-                </nav>
+    <!-- Боковая панель с аккаунтами -->
+    <div class="accounts-sidebar">
+        <div class="account-avatar active">D</div>
+        <div class="account-avatar">P</div>
+        <div class="account-avatar">A</div>
+        <div class="account-avatar add-account">+</div>
+    </div>
+
+    <!-- Боковая панель с чатами -->
+    <div class="chats-sidebar">
+        <div class="sidebar-header">
+            <h2>Telegram</h2>
+            <i class="fas fa-edit"></i>
+        </div>
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Поиск">
+        </div>
+        <div class="chat-list">
+            <!-- Список чатов -->
+            <div class="chat-item active">
+                <div class="chat-avatar">A</div>
+                <div class="chat-info">
+                    <div class="chat-name">Анна <i class="fas fa-check-circle verified-badge"></i></div>
+                    <div class="chat-last-message">Привет! Как дела?</div>
+                </div>
+                <div class="chat-meta">
+                    <div class="chat-time">10:45</div>
+                    <div class="chat-unread">2</div>
+                </div>
             </div>
-        </div>
-    </header>
-
-    <!-- Баннер -->
-    <section class="banner">
-        <div class="container">
-            <h1>Техника будущего уже сегодня</h1>
-            <p>Широкий выбор электроники по доступным ценам</p>
-            <a href="#" class="btn">В каталог</a>
-        </div>
-    </section>
-
-    <!-- Каталог товаров -->
-    <section class="products">
-        <div class="container">
-            <h2 class="section-title">Популярные товары</h2>
-            <div class="product-grid">
-                <!-- Товар 1 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiB2aWV3Qm94PSIwIDAgMjAwIDIwMCI+PHJlY3Qgd2lkdGg9IjIwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNlZWUiLz48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjQwIiBmaWxsPSIjY2NjIi8+PHJlY3QgeD0iNjAiIHk9IjYwIiB3aWR0aD0iODAiIGhlaWdodD0iODAiIGZpbGw9IiM0Y2FmNTAiIG9wYWNpdHk9IjAuNSIvPjwvc3ZnPg==" alt="Смартфон">
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-title">Смартфон XYZ Pro</h3>
-                        <div class="product-price">25 990 ₽</div>
-                        <button class="add-to-cart">В корзину</button>
-                    </div>
+            <div class="chat-item">
+                <div class="chat-avatar">P</div>
+                <div class="chat-info">
+                    <div class="chat-name">Павел Дуров <i class="fas fa-check-circle verified-badge"></i></div>
+                    <div class="chat-last-message">Новости о Telegram</div>
                 </div>
-                
-                <!-- Товар 2 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiB2aWV3Qm94PSIwIDAgMjAwIDIwMCI+PHJlY3Qgd2lkdGg9IjIwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNlZWUiLz48cmVjdCB4PSI0MCIgeT0iNTAiIHdpZHRoPSIxMjAiIGhlaWdodD0iODAiIGZpbGw9IiNjY2MiIHJ4PSI1IiByeT0iNSIvPjxsaW5lIHgxPSI2MCIgeTE9IjcwIiB4Mj0iMTQwIiB5Mj0iNzAiIHN0cm9rZT0iIzRjYWY1MCIgc3Ryb2tlLXdpZHRoPSIzIi8+PGxpbmUgeDE9IjYwIiB5MT0iOTAiIHgyPSIxNDAiIHkyPSI5MCIgc3Ryb2tlPSIjNGNhZjUwIiBzdHJva2Utd2lkdGg9IjMiLz48L3N2Zz4=" alt="Ноутбук">
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-title">Ноутбук UltraBook</h3>
-                        <div class="product-price">54 990 ₽</div>
-                        <button class="add-to-cart">В корзину</button>
-                    </div>
+                <div class="chat-meta">
+                    <div class="chat-time">Вт</div>
                 </div>
-                
-                <!-- Товар 3 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiB2aWV3Qm94PSIwIDAgMjAwIDIwMCI+PHJlY3Qgd2lkdGg9IjIwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNlZWUiLz48Y2lyY2xlIGN4PSIxMDAiIGN5PSI4MCIgcj0iNDAiIGZpbGw9IiNjY2MiLz48cmVjdCB4PSI2MCIgeT0iMTIwIiB3aWR0aD0iODAiIGhlaWdodD0iMzAiIGZpbGw9IiM0Y2FmNTAiIHJ4PSI1IiByeT0iNSIvPjwvc3ZnPg==" alt="Наушники">
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-title">Беспроводные наушники</h3>
-                        <div class="product-price">8 490 ₽</div>
-                        <button class="add-to-cart">В корзину</button>
-                    </div>
+            </div>
+            <div class="chat-item">
+                <div class="chat-avatar">T</div>
+                <div class="chat-info">
+                    <div class="chat-name">Техподдержка <i class="fas fa-check-circle verified-badge"></i></div>
+                    <div class="chat-last-message">Ваш вопрос решен</div>
                 </div>
-                
-                <!-- Товар 4 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiB2aWV3Qm94PSIwIDAgMjAwIDIwMCI+PHJlY3Qgd2lkdGg9IjIwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNlZWUiLz48cmVjdCB4PSI0MCIgeT0iNDAiIHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWxsPSIjY2NjIiByeD0iMTAiLz48Y2lyY2xlIGN4PSIxMDAiIGN5PSI4MCIgcj0iMjUiIGZpbGw9IiM0Y2FmNTAiIG9wYWNpdHk9IjAuNSIvPjxyZWN0IHg9IjY1IiB5PSIxMjAiIHdpZHRoPSI3MCIgaGVpZ2h0PSIxNSIgZmlsbD0iIzRjYWY1MCIgb3BhY2l0eT0iMC43Ii8+PC9zdmc+" alt="Умные часы">
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-title">Умные часы SmartWatch</h3>
-                        <div class="product-price">12 990 ₽</div>
-                        <button class="add-to-cart">В корзину</button>
-                    </div>
+                <div class="chat-meta">
+                    <div class="chat-time">Пн</div>
+                </div>
+            </div>
+            <div class="chat-item">
+                <div class="chat-avatar">F</div>
+                <div class="chat-info">
+                    <div class="chat-name">Друзья</div>
+                    <div class="chat-last-message">Мария: Скинула фото</div>
+                </div>
+                <div class="chat-meta">
+                    <div class="chat-time">Сб</div>
+                    <div class="chat-unread">12</div>
+                </div>
+            </div>
+            <div class="chat-item">
+                <div class="chat-avatar">C</div>
+                <div class="chat-info">
+                    <div class="chat-name">Клуб разработчиков</div>
+                    <div class="chat-last-message">Алексей: Нужна помощь с кодом</div>
+                </div>
+                <div class="chat-meta">
+                    <div class="chat-time">Пт</div>
+                    <div class="chat-unread">7</div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- Подвал сайта -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>О нас</h3>
-                    <p>TechStore - это магазин качественной электроники с лучшими ценами на рынке.</p>
-                </div>
-                
-                <div class="footer-section">
-                    <h3>Категории</h3>
-                    <a href="#">Смартфоны</a>
-                    <a href="#">Ноутбуки</a>
-                    <a href="#">Аксессуары</a>
-                    <a href="#">Телевизоры</a>
-                </div>
-                
-                <div class="footer-section">
-                    <h3>Контакты</h3>
-                    <p>Email: info@techstore.ru</p>
-                    <p>Телефон: +7 (495) 123-45-67</p>
-                    <p>Адрес: Москва, ул. Техническая, д. 25</p>
-                </div>
+    <!-- Основная область чата -->
+    <div class="chat-area">
+        <div class="chat-header">
+            <div class="chat-avatar">A</div>
+            <div class="chat-user-info">
+                <div class="chat-user-name">Анна <i class="fas fa-check-circle verified-badge"></i></div>
+                <div class="chat-user-status">online</div>
+            </div>
+            <div class="chat-actions">
+                <i class="fas fa-search"></i>
+                <i class="fas fa-phone-alt"></i>
+                <i class="fas fa-video"></i>
+                <i class="fas fa-ellipsis-v"></i>
+            </div>
+        </div>
+        <div class="messages-container">
+            <!-- Входящие сообщения -->
+            <div class="message message-incoming">
+                <div class="message-sender">@anna_pro</div>
+                <div class="message-bubble incoming">Привет! Как твои дела?</div>
+                <div class="message-time">10:42</div>
             </div>
             
-            <div class="copyright">
-                &copy; 2023 TechStore. Все права защищены.
+            <!-- Исходящие сообщения -->
+            <div class="message message-outgoing">
+                <div class="message-bubble outgoing">Привет! Всё отлично, спасибо! А у тебя как?</div>
+                <div class="message-time">10:43</div>
+            </div>
+            
+            <div class="message message-incoming">
+                <div class="message-sender">@anna_pro</div>
+                <div class="message-bubble incoming">Тоже всё хорошо! Смотри, какое фото я вчера сделала</div>
+                <div class="message-time">10:45</div>
+            </div>
+            
+            <div class="message message-incoming">
+                <div class="message-sender">@anna_pro</div>
+                <div class="message-bubble incoming">📷 Фото</div>
+                <div class="message-time">10:45</div>
+            </div>
+            
+            <div class="message message-outgoing">
+                <div class="message-bubble outgoing">Классное фото! Где это было сделано?</div>
+                <div class="message-time">10:46</div>
+            </div>
+            
+            <div class="message message-incoming">
+                <div class="message-sender">@anna_pro</div>
+                <div class="message-bubble incoming">Это в горах, недалеко от озера. Там очень красиво!</div>
+                <div class="message-time">10:48</div>
+            </div>
+            
+            <div class="message message-outgoing">
+                <div class="message-bubble outgoing">Надо будет как-нибудь съездить туда вместе!</div>
+                <div class="message-time">10:49</div>
+            </div>
+            
+            <div class="message message-incoming">
+                <div class="message-sender">@anna_pro</div>
+                <div class="message-bubble incoming">Отличная идея! Я буду гидом 😊</div>
+                <div class="message-time">10:50</div>
             </div>
         </div>
-    </footer>
+        <div class="message-input-container">
+            <i class="fas fa-paperclip message-input-action"></i>
+            <i class="fas fa-smile message-input-action"></i>
+            <input type="text" class="message-input" placeholder="Сообщение">
+            <i class="fas fa-microphone message-input-action"></i>
+            <button class="send-button">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
 
     <script>
-        // Простой функционал для добавления товаров в корзину
-        document.querySelectorAll('.add-to-cart').forEach(button => {
-            button.addEventListener('click', function() {
-                const product = this.closest('.product-card');
-                const title = product.querySelector('.product-title').textContent;
-                alert(`Товар "${title}" добавлен в корзину!`);
+        // Данные пользователей
+        const users = {
+            current: {
+                id: 1,
+                name: "Дмитрий",
+                username: "@dmitry_dev",
+                avatar: "D"
+            },
+            accounts: [
+                { id: 1, name: "Дмитрий", username: "@dmitry_dev", avatar: "D" },
+                { id: 2, name: "Павел", username: "@pavel_tg", avatar: "P" },
+                { id: 3, name: "Анна", username: "@anna_pro", avatar: "A" }
+            ],
+            contacts: [
+                { id: 1, name: "Анна", username: "@anna_pro", avatar: "A", verified: true },
+                { id: 2, name: "Павел Дуров", username: "@durov", avatar: "P", verified: true },
+                { id: 3, name: "Техподдержка", username: "@support", avatar: "T", verified: true },
+                { id: 4, name: "Друзья", username: "@friends_group", avatar: "F", verified: false },
+                { id: 5, name: "Клуб разработчиков", username: "@dev_club", avatar: "C", verified: false }
+            ]
+        };
+
+        // Функция для отправки сообщений
+        document.querySelector('.send-button').addEventListener('click', sendMessage);
+        
+        document.querySelector('.message-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        function sendMessage() {
+            const input = document.querySelector('.message-input');
+            const message = input.value.trim();
+            
+            if (message) {
+                const messagesContainer = document.querySelector('.messages-container');
                 
-                // Обновляем счетчик корзины
-                const cartCount = document.querySelector('.cart-count');
-                cartCount.textContent = parseInt(cartCount.textContent) + 1;
+                // Создаем новое сообщение
+                const messageElement = document.createElement('div');
+                messageElement.className = 'message message-outgoing';
+                
+                const bubble = document.createElement('div');
+                bubble.className = 'message-bubble outgoing';
+                bubble.textContent = message;
+                
+                const time = document.createElement('div');
+                time.className = 'message-time';
+                
+                // Текущее время
+                const now = new Date();
+                time.textContent = now.getHours() + ':' + String(now.getMinutes()).padStart(2, '0');
+                
+                messageElement.appendChild(bubble);
+                messageElement.appendChild(time);
+                
+                messagesContainer.appendChild(messageElement);
+                
+                // Очищаем поле ввода и прокручиваем вниз
+                input.value = '';
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                
+                // Имитируем ответ через 1-2 секунды
+                const delay = 1000 + Math.random() * 1000;
+                setTimeout(function() {
+                    const replies = [
+                        "Интересно!",
+                        "Расскажи подробнее!",
+                        "Я тоже об этом думал!",
+                        "Здорово!",
+                        "Надо будет обсудить это при встрече)",
+                        "Согласен с тобой!",
+                        "Спасибо за информацию!"
+                    ];
+                    
+                    const reply = replies[Math.floor(Math.random() * replies.length)];
+                    
+                    const replyElement = document.createElement('div');
+                    replyElement.className = 'message message-incoming';
+                    
+                    const sender = document.createElement('div');
+                    sender.className = 'message-sender';
+                    sender.textContent = users.contacts[0].username;
+                    
+                    const replyBubble = document.createElement('div');
+                    replyBubble.className = 'message-bubble incoming';
+                    replyBubble.textContent = reply;
+                    
+                    const replyTime = document.createElement('div');
+                    replyTime.className = 'message-time';
+                    
+                    const replyNow = new Date();
+                    replyTime.textContent = replyNow.getHours() + ':' + String(replyNow.getMinutes()).padStart(2, '0');
+                    
+                    replyElement.appendChild(sender);
+                    replyElement.appendChild(replyBubble);
+                    replyElement.appendChild(replyTime);
+                    
+                    messagesContainer.appendChild(replyElement);
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                }, delay);
+            }
+        }
+        
+        // Переключение между аккаунтами
+        document.querySelectorAll('.account-avatar').forEach((avatar, index) => {
+            avatar.addEventListener('click', function() {
+                if (index < users.accounts.length) {
+                    // Убираем активный класс у всех аватаров
+                    document.querySelectorAll('.account-avatar').forEach(a => a.classList.remove('active'));
+                    // Добавляем активный класс текущему аватару
+                    this.classList.add('active');
+                    
+                    // Обновляем данные текущего пользователя
+                    users.current = users.accounts[index];
+                    
+                    // Можно добавить логику загрузки чатов для выбранного пользователя
+                }
             });
         });
+        
+        // Переключение между чатами
+        document.querySelectorAll('.chat-item').forEach(chat => {
+            chat.addEventListener('click', function() {
+                // Убираем активный класс у всех чатов
+                document.querySelectorAll('.chat-item').forEach(c => c.classList.remove('active'));
+                // Добавляем активный класс текущему чату
+                this.classList.add('active');
+                
+                // Можно добавить логику загрузки сообщений выбранного чата
+            });
+        });
+        
+        // Прокрутка вниз при загрузке
+        window.onload = function() {
+            const messagesContainer = document.querySelector('.messages-container');
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        };
     </script>
 </body>
 </html>
