@@ -1,575 +1,64 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grow a Garden Trade | Торговая площадка</title>
-    <style>
-        :root {
-            --primary: #4CAF50;
-            --primary-dark: #388E3C;
-            --secondary: #FF9800;
-            --dark: #1E1E1E;
-            --light: #F5F5F5;
-            --gray: #757575;
-            --white: #FFFFFF;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: #f0f8f0;
-            color: #333;
-            line-height: 1.6;
-        }
-        
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
-        
-        /* Header Styles */
-        header {
-            background-color: var(--primary);
-            padding: 1rem 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .logo img {
-            height: 40px;
-        }
-        
-        .logo h1 {
-            color: white;
-            font-size: 1.5rem;
-        }
-        
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 20px;
-        }
-        
-        nav a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            padding: 5px 10px;
-            border-radius: 4px;
-            transition: background 0.3s;
-        }
-        
-        nav a:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        
-        .auth-buttons {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .btn {
-            padding: 8px 16px;
-            border-radius: 4px;
-            border: none;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-        
-        .btn-primary {
-            background-color: var(--secondary);
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background-color: #F57C00;
-        }
-        
-        .btn-outline {
-            background-color: transparent;
-            border: 1px solid white;
-            color: white;
-        }
-        
-        .btn-outline:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-        
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            padding: 3rem 0;
-            text-align: center;
-        }
-        
-        .hero h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 800px;
-            margin: 0 auto 2rem;
-        }
-        
-        /* Features Section */
-        .features {
-            padding: 3rem 0;
-            background-color: var(--white);
-        }
-        
-        .section-title {
-            text-align: center;
-            margin-bottom: 2rem;
-            color: var(--dark);
-        }
-        
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-        
-        .feature-card {
-            background: var(--light);
-            border-radius: 8px;
-            padding: 1.5rem;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: transform 0.3s;
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .feature-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: var(--primary);
-        }
-        
-        /* Items Section */
-        .items-section {
-            padding: 3rem 0;
-            background-color: #f9f9f9;
-        }
-        
-        .items-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
-        
-        .item-card {
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: transform 0.3s;
-        }
-        
-        .item-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .item-image {
-            height: 180px;
-            background-color: #e0e0e0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--gray);
-        }
-        
-        .item-info {
-            padding: 1rem;
-        }
-        
-        .item-title {
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-        
-        .item-price {
-            color: var(--primary);
-            font-weight: bold;
-            margin-bottom: 1rem;
-        }
-        
-        /* Telegram Auth */
-        .telegram-auth {
-            background: linear-gradient(135deg, #0088cc 0%, #34aadc 100%);
-            padding: 3rem 0;
-            color: white;
-            text-align: center;
-        }
-        
-        .telegram-auth .container {
-            max-width: 600px;
-        }
-        
-        .telegram-btn {
-            background: white;
-            color: #0088cc;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-weight: 600;
-            margin-top: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .telegram-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        /* Chat Section */
-        .chat-section {
-            padding: 3rem 0;
-            background-color: var(--white);
-        }
-        
-        .chat-container {
-            max-width: 800px;
-            margin: 0 auto;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        
-        .chat-header {
-            background: var(--primary);
-            color: white;
-            padding: 1rem;
-            text-align: center;
-        }
-        
-        .chat-messages {
-            height: 300px;
-            overflow-y: auto;
-            padding: 1rem;
-            background: #f9f9f9;
-        }
-        
-        .message {
-            margin-bottom: 1rem;
-            padding: 0.5rem 1rem;
-            border-radius: 18px;
-            max-width: 80%;
-        }
-        
-        .message.incoming {
-            background: #e0e0e0;
-            margin-right: auto;
-        }
-        
-        .message.outgoing {
-            background: var(--primary);
-            color: white;
-            margin-left: auto;
-        }
-        
-        .chat-input {
-            display: flex;
-            padding: 1rem;
-            background: white;
-            border-top: 1px solid #e0e0e0;
-        }
-        
-        .chat-input input {
-            flex: 1;
-            padding: 10px 15px;
-            border: 1px solid #e0e0e0;
-            border-radius: 50px;
-            margin-right: 10px;
-        }
-        
-        /* Footer */
-        footer {
-            background: var(--dark);
-            color: white;
-            padding: 2rem 0;
-        }
-        
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-        }
-        
-        .footer-section h3 {
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
-        }
-        
-        .footer-section ul {
-            list-style: none;
-        }
-        
-        .footer-section a {
-            color: #ddd;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        
-        .footer-section a:hover {
-            color: white;
-        }
-        
-        .copyright {
-            text-align: center;
-            margin-top: 2rem;
-            padding-top: 1rem;
-            border-top: 1px solid #444;
-        }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            
-            nav ul {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            
-            .hero h2 {
-                font-size: 2rem;
-            }
-            
-            .hero p {
-                font-size: 1rem;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Строки</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: transparent;           /* прозрачный фон */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      /* Клик по прозрачному фону закроет Web App */
+    }
+    .card {
+      background: var(--tg-theme-bg-color, #ffffff);
+      color: var(--tg-theme-text-color, #000000);
+      padding: 20px;
+      border-radius: 16px;
+      max-width: 90%;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      text-align: left;
+    }
+    .title { font-weight: bold; font-size: 18px; margin-bottom: 8px; }
+    .subtitle { font-size: 14px; margin-bottom: 14px; }
+    .list-item { margin: 6px 0; font-size: 15px; }
+  </style>
 </head>
-<body>
-    <!-- Header -->
-    <header>
-        <div class="container header-content">
-            <div class="logo">
-                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSIjZmZmZmZmIiBkPSJNNDQ4IDIyNGMwLTUwLjEtMjMuNC05NS4xLTYwLTExOC4xIDIuOCA2LjkgNCAxNCA0IDIxLjUgMCA0NC4xLTM1LjggODAtODAgODAtMTguMiAwLTM0LjgtNi4yLTQ4LTE2LjFDMTk4LjIgMTQ0LjIgMTYwIDE4NC44IDE2MCAyMzJjMCAxNy43IDQuNiAzNC40IDEyLjYgNDguOGMtMTEuOSA4LjctMTkuNyAyMi42LTE5LjcgMzkuMiAwIDI2LjUgMjEuNSA0OCA0OCA0OGgxNjBjNDQuMiAwIDgwLTM1LjggODAtODAgMC0yNC4yLTEwLjctNDUuOS0yNy44LTYwLjggMTEuOS04LjQgMjMuOC0xOC40IDIzLjgtMzUuMnpNMjA4IDI1NmMwLTguOC03LjItMTYtMTYtMTZzLTE2IDcuMi0xNiAxNiA3LjIgMTYgMTYgMTYgMTYtNy4yIDE2LTE2em02NCA2NGMwIDguOC03LjIgMTYtMTYgMTZzLTE2LTcuMi0xNi0xNiA3LjItMTYgMTYtMTYgMTYgNy4yIDE2IDE2em0xNi00OGMtOC44IDAtMTYgNy4yLTE2IDE2czcuMiAxNiAxNiAxNiAxNi03LjIgMTYtMTYtNy4yLTE2LTE2LTE2eiIvPjwvc3ZnPg==" alt="Grow a Garden Logo">
-                <h1>Grow a Garden Trade</h1>
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="#">Главная</a></li>
-                    <li><a href="#">Товары</a></li>
-                    <li><a href="#">Продать</a></li>
-                    <li><a href="#">Чаты</a></li>
-                    <li><a href="#">Помощь</a></li>
-                </ul>
-            </nav>
-            <div class="auth-buttons">
-                <button class="btn btn-outline" id="loginBtn">Войти</button>
-                <button class="btn btn-primary" id="registerBtn">Регистрация</button>
-            </div>
-        </div>
-    </header>
+<body onclick="document.body.style.pointerEvents='none'; setTimeout(()=>window.Telegram.WebApp.close(), 20);">
+  <div class="card" onclick="event.stopPropagation();">
+    <div class="title" id="title"></div>
+    <div class="subtitle" id="subtitle"></div>
+    <div id="texts"></div>
+  </div>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <h2>Торговая площадка для игры Grow a Garden</h2>
-            <p>Покупайте и продавайте редкие растения, инструменты и предметы с защищенными сделками через Telegram</p>
-            <button class="btn btn-primary">Начать торговлю</button>
-        </div>
-    </section>
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.ready();
+    // Получаем строки из параметров URL (передаёт бот)
+    const params = new URLSearchParams(tg.initDataUnsafe?.start_param || window.location.search);
+    const item1 = params.get('t1') || '—';
+    const item2 = params.get('t2') || '—';
+    const item3 = params.get('t3') || '—';
 
-    <!-- Features Section -->
-    <section class="features">
-        <div class="container">
-            <h2 class="section-title">Почему выбирают нас</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🔒</div>
-                    <h3>Безопасные сделки</h3>
-                    <p>Все транзакции защищены системой гаранта</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">💬</div>
-                    <h3>Чат с покупателями</h3>
-                    <p>Общайтесь напрямую с другими игроками</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📊</div>
-                    <h3>Актуальные цены</h3>
-                    <p>Следите за изменениями цен на рынке</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Items Section -->
-    <section class="items-section">
-        <div class="container">
-            <h2 class="section-title">Популярные товары</h2>
-            <div class="items-grid">
-                <div class="item-card">
-                    <div class="item-image">Золотая лейка</div>
-                    <div class="item-info">
-                        <h3 class="item-title">Золотая лейка</h3>
-                        <p class="item-price">750 Robux</p>
-                        <button class="btn btn-primary">Купить сейчас</button>
-                    </div>
-                </div>
-                <div class="item-card">
-                    <div class="item-image">Редкий кактус</div>
-                    <div class="item-info">
-                        <h3 class="item-title">Редкий кактус</h3>
-                        <p class="item-price">1,200 Robux</p>
-                        <button class="btn btn-primary">Купить сейчас</button>
-                    </div>
-                </div>
-                <div class="item-card">
-                    <div class="item-image">Магическое дерево</div>
-                    <div class="item-info">
-                        <h3 class="item-title">Магическое дерево</h3>
-                        <p class="item-price">2,500 Robux</p>
-                        <button class="btn btn-primary">Купить сейчас</button>
-                    </div>
-                </div>
-                <div class="item-card">
-                    <div class="item-image">Набор удобрений</div>
-                    <div class="item-info">
-                        <h3 class="item-title">Набор удобрений</h3>
-                        <p class="item-price">450 Robux</p>
-                        <button class="btn btn-primary">Купить сейчас</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Telegram Auth Section -->
-    <section class="telegram-auth">
-        <div class="container">
-            <h2>Быстрая регистрация через Telegram</h2>
-            <p>Войдите за секунды и начните торговать прямо сейчас</p>
-            <div class="telegram-btn">
-                <span>➤</span> Войти через Telegram
-            </div>
-        </div>
-    </section>
-
-    <!-- Chat Section -->
-    <section class="chat-section">
-        <div class="container">
-            <h2 class="section-title">Общайтесь с покупателями</h2>
-            <div class="chat-container">
-                <div class="chat-header">
-                    <h3>Чат с пользователем User123</h3>
-                </div>
-                <div class="chat-messages">
-                    <div class="message incoming">
-                        <p>Здравствуйте! Сколько стоит золотая лейка?</p>
-                    </div>
-                    <div class="message outgoing">
-                        <p>Привет! 750 Robux, но могу уступить за 700 если возьмёте сегодня</p>
-                    </div>
-                    <div class="message incoming">
-                        <p>Есть скидка если куплю вместе с набором удобрений?</p>
-                    </div>
-                </div>
-                <div class="chat-input">
-                    <input type="text" placeholder="Введите сообщение...">
-                    <button class="btn btn-primary">Отправить</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>Grow a Garden Trade</h3>
-                    <p>Лучшая площадка для торговли предметами из игры Grow a Garden в Roblox</p>
-                </div>
-                <div class="footer-section">
-                    <h3>Навигация</h3>
-                    <ul>
-                        <li><a href="#">Главная</a></li>
-                        <li><a href="#">Товары</a></li>
-                        <li><a href="#">Продать</a></li>
-                        <li><a href="#">Чаты</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Помощь</h3>
-                    <ul>
-                        <li><a href="#">Как покупать</a></li>
-                        <li><a href="#">Как продавать</a></li>
-                        <li><a href="#">Правила</a></li>
-                        <li><a href="#">Поддержка</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="copyright">
-                <p>© 2023 Grow a Garden Trade. Все права защищены.</p>
-                <p>Этот сайт не affiliated с Roblox Corporation.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        // Обработка кнопок входа и регистрации
-        document.getElementById('loginBtn').addEventListener('click', function() {
-            alert('Форма входа через Telegram будет открыта');
-        });
-        
-        document.getElementById('registerBtn').addEventListener('click', function() {
-            alert('Регистрация через Telegram будет открыта');
-        });
-        
-        // Обработка кнопок "Купить сейчас"
-        const buyButtons = document.querySelectorAll('.btn-primary');
-        buyButtons.forEach(button => {
-            if (button.textContent === 'Купить сейчас') {
-                button.addEventListener('click', function() {
-                    alert('Для покупки необходимо войти через Telegram');
-                });
-            }
-        });
-        
-        // Обработка кнопки Telegram
-        const telegramBtn = document.querySelector('.telegram-btn');
-        telegramBtn.addEventListener('click', function() {
-            alert('Открывается окно авторизации через Telegram');
-        });
-    </script>
+    document.getElementById('title').innerText = 'NightNull';
+    document.getElementById('subtitle').innerText = 'Ты — 🎉 Владелец строк.\nЗдесь твои загадочные фразы:\n\nТЕКСТЫ';
+    const list = document.getElementById('texts');
+    [item1, item2, item3].forEach(t => {
+      const p = document.createElement('div');
+      p.className = 'list-item';
+      p.innerText = `- ${t}`;
+      list.appendChild(p);
+    });
+    // Клик по прозрачному фону (body) закрывает приложение
+    document.body.addEventListener('click', () => {
+      tg.close();
+    });
+  </script>
 </body>
 </html>
